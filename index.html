@@ -219,7 +219,17 @@ function supplierEmail(s){return s==="Coodec" ? settings.coodecEmail : settings.
 function supplierGroup(s){return s==="Coodec" ? "Coodec" : "Ronjack / Oakio"}
 function customerDiscountRate(){let type=document.getElementById("customerType").value;let manual=Number(document.getElementById("manualDiscount").value)||0;let tier=0;if(type==="repeat")tier=settings.repeatDiscount;if(type==="trade")tier=settings.tradeDiscount;if(type==="staff")tier=settings.staffDiscount;return pct(Math.max(tier, manual))}
 function sellingPrice(base){let price=base*(1+pct(settings.markup))*(1+pct(settings.guernseyShipping));price=price*(1-customerDiscountRate());let min=base/(1-pct(settings.minMargin));return Number(Math.max(price,min).toFixed(2))}
-function showTab(tab){["quote","customers","saved","po","settings"].forEach(t=>{document.getElementById(t+"Tab").classList.toggle("hide",t!==tab);document.getElementById("tab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle("active",t===tab)});if(tab==="customers")renderCustomers();if(tab==="saved")renderSaved();if(tab==="po")renderPOs();if(tab==="settings")loadSettingsForm()}
+function showTab(tab){
+  const tabButtonIds = {quote:"tabQuote", customers:"tabCustomers", saved:"tabSaved", po:"tabPO", settings:"tabSettings"};
+  ["quote","customers","saved","po","settings"].forEach(t=>{
+    document.getElementById(t+"Tab").classList.toggle("hide",t!==tab);
+    document.getElementById(tabButtonIds[t]).classList.toggle("active",t===tab);
+  });
+  if(tab==="customers")renderCustomers();
+  if(tab==="saved")renderSaved();
+  if(tab==="po")renderPOs();
+  if(tab==="settings")loadSettingsForm();
+}
 function init(){document.getElementById("quoteNo").textContent=quoteNo();document.getElementById("date").textContent=new Date().toLocaleDateString("en-GB");let suppliers=["All",...new Set(PRODUCTS.map(p=>p.supplier))].sort();document.getElementById("supplier").innerHTML=suppliers.map(v=>`<option>${v}</option>`).join("");populateCategories();renderProducts();renderQuote();renderCustomers();renderSaved();}
 function populateCategories(){let s=document.getElementById("supplier").value;let current=document.getElementById("category").value;let available=PRODUCTS.filter(p=>s==="All"||p.supplier===s);let vals=["All",...new Set(available.map(p=>p.category))].sort();document.getElementById("category").innerHTML=vals.map(v=>`<option>${v}</option>`).join("");if(vals.includes(current))document.getElementById("category").value=current}
 function supplierChanged(){populateCategories();renderProducts()}
@@ -251,5 +261,10 @@ function loadSettingsForm(){document.getElementById("setMarkup").value=settings.
 function saveSettings(){settings={markup:Number(document.getElementById("setMarkup").value)||0,guernseyShipping:Number(document.getElementById("setShipping").value)||0,repeatDiscount:Number(document.getElementById("setRepeat").value)||0,tradeDiscount:Number(document.getElementById("setTrade").value)||0,staffDiscount:Number(document.getElementById("setStaff").value)||0,minMargin:Number(document.getElementById("setMinMargin").value)||0,quotePrefix:document.getElementById("setQuotePrefix").value||"CIC",ronjackEmail:document.getElementById("setRonjackEmail").value,coodecEmail:document.getElementById("setCoodecEmail").value};localStorage.setItem("cicSettings",JSON.stringify(settings));recalcLinePrices();alert("Settings saved")}
 function resetSettings(){settings=DEFAULT_SETTINGS;localStorage.setItem("cicSettings",JSON.stringify(settings));loadSettingsForm();recalcLinePrices()}
 init();
+
+window.addEventListener("error", function(e){
+  console.error(e.message);
+});
+
 </script>
 </body></html>
