@@ -11,7 +11,13 @@ const DEFAULT_SETTINGS = { markup: 20, guernseyShipping: 15.7, repeatDiscount: 5
 
 function money(n) { return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(Number(n) || 0); }
 function titleCase(word) {
-  const labels = { quote: "Quote Builder", quotes: "Saved Quotes", orders: "Purchase Orders", customers: "Customers", settings: "Settings" };
+  const labels = {
+    quote: "New Quote",
+    quotes: "Quote History",
+    orders: "Purchase Orders",
+    customers: "Customers",
+    settings: "Settings"
+  };
   return labels[word] || String(word).replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
 }
 function settingLabel(key) {
