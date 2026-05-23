@@ -176,7 +176,7 @@ function App() {
 
   return <div className="wrap">
     <div className="top"><div><h1>CIC App</h1><p className="sub">Logged in as {session.user.email}</p></div><div className="actions"><button onClick={startNewQuote}>New Quote</button><button className="grey" onClick={()=>supabase.auth.signOut()}>Log out</button></div></div>
-    <div className="tabs">>{[
+    <div className="tabs">{[
   {key:"quote",label:"New Quote"},
   {key:"quotes",label:"Quote History"},
   {key:"orders",label:"Purchase Orders"},
