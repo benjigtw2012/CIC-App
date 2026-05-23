@@ -176,7 +176,21 @@ function App() {
 
   return <div className="wrap">
     <div className="top"><div><h1>CIC App</h1><p className="sub">Logged in as {session.user.email}</p></div><div className="actions"><button onClick={startNewQuote}>New Quote</button><button className="grey" onClick={()=>supabase.auth.signOut()}>Log out</button></div></div>
-    <div className="tabs">{["quote","quotes","orders","customers","settings"].map(t=><button key={t} className={tab===t?"active":""} onClick={()=>setTab(t)}>{t}</button>)}</div>
+    <div className="tabs">>{[
+  {key:"quote",label:"New Quote"},
+  {key:"quotes",label:"Quote History"},
+  {key:"orders",label:"Purchase Orders"},
+  {key:"customers",label:"Customers"},
+  {key:"settings",label:"Settings"}
+].map(t=>
+<button
+  key={t.key}
+  className={tab===t.key?"active":""}
+  onClick={()=>setTab(t.key)}
+>
+  {t.label}
+</button>
+)}</div>
 
     {tab==="quote" && <div className="grid">
       <section className="card">
