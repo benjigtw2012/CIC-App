@@ -23,3 +23,8 @@ VITE_SUPABASE_ANON_KEY
 DROPBOX_ACCESS_TOKEN
 
 Dropbox token is optional. Without it, quotes/orders still save to Supabase.
+
+
+## Update
+
+Polished front-end labels and tab titles.

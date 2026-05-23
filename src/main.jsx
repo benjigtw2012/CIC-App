@@ -10,6 +10,20 @@ const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env
 const DEFAULT_SETTINGS = { markup: 20, guernseyShipping: 15.7, repeatDiscount: 5, tradeDiscount: 10, minMargin: 12 };
 
 function money(n) { return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(Number(n) || 0); }
+function titleCase(word) {
+  const labels = { quote: "Quote Builder", quotes: "Saved Quotes", orders: "Purchase Orders", customers: "Customers", settings: "Settings" };
+  return labels[word] || String(word).replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+}
+function settingLabel(key) {
+  const labels = {
+    markup: "Quote Uplift %",
+    guernseyShipping: "Guernsey Shipping Surcharge %",
+    repeatDiscount: "Repeat Customer Discount %",
+    tradeDiscount: "Trade Customer Discount %",
+    minMargin: "Minimum Margin %"
+  };
+  return labels[key] || titleCase(key);
+}
 function carriage(weight) { if (weight >= 1000) return 0; if (weight >= 617) return 110; if (weight >= 386) return 145; if (weight > 0) return 185; return 0; }
 function sellPrice(base, type, s) {
   let discount = type === "repeat" ? s.repeatDiscount : type === "trade" ? s.tradeDiscount : 0;
@@ -177,7 +191,7 @@ function App() {
     {tab==="quotes" && <section className="card"><h2>Saved Quotes</h2><table><thead><tr><th>Quote</th><th>Customer</th><th>Status</th><th>Total</th><th>Created by</th></tr></thead><tbody>{quotes.map(q=><tr key={q.quote_no}><td>{q.quote_no}</td><td>{q.customer}</td><td>{q.status}</td><td>{money(q.totals?.total)}</td><td>{q.created_by}</td></tr>)}</tbody></table></section>}
     {tab==="orders" && <section className="card"><h2>Purchase Orders</h2><table><thead><tr><th>PO</th><th>Quote</th><th>Supplier</th><th>Cost</th><th>Created by</th></tr></thead><tbody>{orders.map(o=><tr key={o.po_no}><td>{o.po_no}</td><td>{o.quote_no}</td><td>{o.supplier}</td><td>{money(o.totals?.cost)}</td><td>{o.created_by}</td></tr>)}</tbody></table></section>}
     {tab==="customers" && <section className="card"><h2>Customers</h2><table><thead><tr><th>Name</th><th>Type</th></tr></thead><tbody>{customers.map(c=><tr key={c.id}><td>{c.name}</td><td>{c.type}</td></tr>)}</tbody></table></section>}
-    {tab==="settings" && <section className="card"><h2>Settings</h2><div className="three">{Object.keys(DEFAULT_SETTINGS).map(k=><label key={k}>{k}<input type="number" value={settings[k]} onChange={e=>setSettings({...settings,[k]:Number(e.target.value)})} /></label>)}</div><button onClick={saveSettings}>Save Settings</button></section>}
+    {tab==="settings" && <section className="card"><h2>Settings</h2><div className="three">{Object.keys(DEFAULT_SETTINGS).map(k=><label key={k}>{settingLabel(k)}<input type="number" value={settings[k]} onChange={e=>setSettings({...settings,[k]:Number(e.target.value)})} /></label>)}</div><button onClick={saveSettings}>Save Settings</button></section>}
   </div>;
 }
 
