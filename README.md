@@ -25,6 +25,6 @@ DROPBOX_ACCESS_TOKEN
 Dropbox token is optional. Without it, quotes/orders still save to Supabase.
 
 
-## Update
+## Product database
 
-Polished front-end labels and tab titles.
+This build includes 204 product lines from the fuller CIC app product database.
